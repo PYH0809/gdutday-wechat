@@ -84,6 +84,7 @@ export default {
 	},
 	created() {
 		this.schoolOpening().catch(e => console.log(e));
+        this.checkOldUser();
 	},
 	methods: {
 		async schoolOpening() {
@@ -96,7 +97,25 @@ export default {
 				// TODO 刷新一次课表
 				openSchoolChangeTips();
 			}
-		}
+		},
+        checkOldUser() {
+            var version = uni.getStorageSync('version');
+            var id = this.$education.ID;
+            if (id == "" && version != "1.0.0") {
+                let that = this;
+                uni.showModal({
+                	title: '提示',
+                	content: '检查到您是老用户,由于特殊原因gdutday转移使用教务系统登录,劳烦绑定教务系统登录,以保证正常使用',
+                	confirmColor: this.$commonFun.hexify(this.$colorList.theme),
+                	confirmText: '前往',
+                    success (res) {
+                        if(res.confirm) {
+                            that.$Router.push({ name: 'login' })
+                        }
+                    }
+                });
+            }
+        }
 	}
 };
 </script>

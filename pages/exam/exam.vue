@@ -151,12 +151,15 @@ export default {
 			this.$emit('click', e);
 		},
 		handleExamCountDown(examCountDown) {
-			let subffix;
-			if (examCountDown > 9) subffix = '';
-			else if (examCountDown > 0) subffix = '天';
-			else if (examCountDown === 0) subffix = '今';
-			else subffix = '结';
-			return examCountDown + subffix;
+            if (examCountDown < 0) {
+                return "结";
+            } else if (examCountDown === 0) {
+                return "今";
+            } else if (examCountDown > 0 && examCountDown < 10) {
+                return examCountDown + "天";
+            } else {
+                return examCountDown + "";
+            }
 		},
 		getExam() {
 			//获取列表
