@@ -448,12 +448,12 @@ export function getTimeToCnameTime(stringTime) {
 	let day = hour * 24;
 	let week = day * 7;
 	let month = day * 30;
-	let time1 = new Date().getTime(); //当前的时间戳
+	let time1 = new Date(); //当前的时间戳
 	let time2 = Date.parse(new Date(stringTime)); //指定时间的时间戳
 	let time = time1 - time2;
 	let result = null;
 	if (time < 0) {
-		alert("设置的时间不能早于当前时间！");
+        result = "你时间很怪耶";
 	} else if (time / month >= 1) {
 		result = parseInt(time / month) + "月前";
 	} else if (time / week >= 1) {

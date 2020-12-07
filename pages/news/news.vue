@@ -69,7 +69,7 @@ export default {
 					this.pageNum++;
                     // console.log(data);
                     data.forEach(d=>{
-                       d.newsTime = d.newsTime.replace(new RegExp("/","gm"),"-");
+                       // d.newsTime = d.newsTime.replace(new RegExp("/","gm"),"-");
                        d.newsTime = getTimeToCnameTime(d.newsTime);
                     });
 					this.putInfoToList(data);
