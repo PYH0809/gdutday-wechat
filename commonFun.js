@@ -484,16 +484,19 @@ export function getLastExam() {
 	if (examList[0].examSubject === defaultExamNewData[0].examSubject) {
 		return null
 	}
-	let last = examList[0];
+	let last = null;
 	examList.forEach(it => {
 		it.examCountDown = getDayDiff(it.examDate);
 		if (it.examCountDown >= 0) {
+            if (last == null) {
+                last = it;
+            }
 			if (it.examCountDown < last.examCountDown) {
 				last = it;
 			}
 		}
 	})
-	return last.examCountDown < 0 ? null : last;
+	return last;
 }
 
 const commonFun = {
