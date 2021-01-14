@@ -11,6 +11,14 @@ import {
 import { http } from '@/axios-config.js';
 export default {
 	onLaunch() {
+        // 修复因考试安排与课表冲突导致的白屏
+        Vue.prototype.$store.commit({
+        	type: 'changeStateofSchedule',
+        	stateName: 'examData',
+        	value: [],
+        	toStorage: true,
+        	toStringify: true
+        });
 		//从0开始
 		//计数
 		const currentWeek = getCurrentWeek();
@@ -69,14 +77,6 @@ export default {
 				// #endif
 			}
 		});
-		// 修复因考试安排与课表冲突导致的白屏
-		Vue.prototype.$store.commit({
-			type: 'changeStateofSchedule',
-			stateName: 'examData',
-			value: [],
-			toStorage: true,
-			toStringify: true
-		});
 	},
 	onShow() {},
 	onHide: function() {
@@ -93,8 +93,18 @@ export default {
 			var oldTime = uni.getStorageSync('schoolOpening');
 			uni.setStorageSync('schoolOpening', schoolOpening);
 			if (oldTime !== schoolOpening) {
-				// TODO 刷新一次课表
-				openSchoolChangeTips();
+                let content = "检测到本地时间与服务器时间不一致\n点击确定后将重新跳转登录以更新课程\n请更新完后重启小程序同步时间";
+                let that = this;
+                uni.showModal({
+                    showCancel: false,
+                    title: "提示",
+                    content: content,
+                    success() {
+                        Vue.prototype.$currentWeek = getCurrentWeek();
+                        Vue.prototype.$currentDay = (new Date().getDay() || 7) - 1;
+                        that.$Router.push({ name: 'login' });
+                    }
+                });
 			}
 		}
 	}
