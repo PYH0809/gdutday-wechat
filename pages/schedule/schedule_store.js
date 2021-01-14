@@ -27,6 +27,7 @@ export default {
 		firstIndex: getStorageSync("firstIndex", 0),
 		classData: getStorageSync("classData", defaultCourseBlock, true),
 		examData: getStorageSync("examData", [], true),
+        version:  getStorageSync("version", "1.0.0", true),
 		examNewData: getStorageSync("examNewData", defaultExamNewData, true),
 		addClassData: getStorageSync("addClassData", [], true),
         // countTimes: getStorageSync("countTimes", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],true), //校区

@@ -43,7 +43,7 @@
 		</view>
 		<!-- <view class="text-lg text-blue" @tap="toGrade">{{ lastestGrade }}</view> -->
         <view class="flex-row">
-            <text class="m-center text-center text-gray mt-5">v1.6.1@gdutday</text>
+            <text class="m-center text-center text-gray mt-5">v1.6.5@gdutday</text>
         </view>
     </view>
 </template>
@@ -143,7 +143,16 @@ export default {
 		await wait(300);
 		uni.hideLoading();
 		this.delay = true;
-        this.lastExam = getLastExam();
+        let exam = getLastExam();
+        if (exam != null) {
+            if (exam.examSubject.length > 8) {
+                let string = exam.examSubject
+                string = string.substring(0,8)
+                string = string + '...'
+                exam.examSubject = string
+            }
+        }
+        this.lastExam = exam;
 	},
 	computed: {
 		iconColor() {
