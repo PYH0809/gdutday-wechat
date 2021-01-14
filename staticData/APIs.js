@@ -10,8 +10,9 @@ export const APIs = {
 	campus: "/crawler/campus",
 	grade: "/crawler/grade",
 	login: "/user/login",
-	checkMsg:"/check/msg", // 检测文字是否合乎法规的接口
+	checkMsg: "/check/msg", // 检测文字是否合乎法规的接口
 	// download: "/document/download",
+	orc: baseFunctionsUrl + "/orc",
 	getPayImg: baseFunctionsUrl + "/getPayImg",
 	getNetInfo: baseFunctionsUrl + "/getNetInfo",
 	getLink: baseFunctionsUrl + '/getLink',

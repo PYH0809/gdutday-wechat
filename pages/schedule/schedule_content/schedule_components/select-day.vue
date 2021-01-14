@@ -73,14 +73,14 @@ export default {
 		dayFilter(oneDay) {
 			const result = this.$commonFun.getDate(oneDay);
 			//日历过滤
-			const calendar = [
-				{ day: '9.13', holiday: '中秋' },
-				{ day: '9.23', holiday: '秋分' },
-				{ day: '10.13', holiday: '重阳' },
-				{ day: '10.1', holiday: '国庆' },
-				{ day: '12.25', holiday: '圣诞' },
-				{ day: '1.1', holiday: '元旦' }
-			];
+			// const calendar = [
+			// 	{ day: '9.13', holiday: '中秋' },
+			// 	{ day: '9.23', holiday: '秋分' },
+			// 	{ day: '10.13', holiday: '重阳' },
+			// 	{ day: '10.1', holiday: '国庆' },
+			// 	{ day: '12.25', holiday: '圣诞' },
+			// 	{ day: '1.1', holiday: '元旦' }
+			// ];
 			// calendar.forEach(item => {
 			// 	if (result == item.day) {
 			// 		result = item.holiday;

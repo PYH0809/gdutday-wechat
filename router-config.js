@@ -100,6 +100,9 @@ export default {
 		},{
 			path:"/pages/library/douban",
 			name:"douban"
+		},{
+			path:"/pages/card-orc/card-orc",
+			name:"orc"
 		},
 		...Array.from({
 			length: 10

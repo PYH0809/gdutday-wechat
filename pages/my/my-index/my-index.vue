@@ -104,6 +104,10 @@ export default {
 					text: '意见反馈'
 				},
 				{
+					icon: 'contact',
+					text: '联系客服'
+				},
+				{
 					icon: 'mark',
 					text: '更新日志'
 				},
