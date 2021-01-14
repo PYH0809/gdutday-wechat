@@ -29,7 +29,8 @@ export default {
 	inject: ['Bus'],
 	data() {
 		return {
-			sevenDay: Array.from({ length: 7 }, () => '')
+			sevenDay: Array.from({ length: 7 }, () => ''),
+			currentWeek:this.$currentWeek
 		};
 	},
 	computed: {
@@ -45,9 +46,9 @@ export default {
 				today: `color:${this.$colorList.theme};background-color:${this.$colorList.white}`
 			};
 		},
-		currentWeek() {
-			return this.$currentWeek;
-		},
+		// currentWeek() {
+		// 	return this.$currentWeek;
+		// },
 		currentDay() {
 			return this.$currentDay;
 		},
@@ -60,6 +61,12 @@ export default {
 	},
 	created() {
 		this.dayResult();
+		this.$on('changeSchoolOpening',()=>{
+			this.currentWeek = this.$currentWeek
+		})
+	},
+	beforeDestroy() {
+		this.$off('changeSchoolOpening')
 	},
 	methods: {
 		selectDay(e) {

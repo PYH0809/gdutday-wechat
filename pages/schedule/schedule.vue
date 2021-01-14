@@ -9,7 +9,9 @@
 			<!-- <plugin-add-course v-if="bottomModalType == 'add'" /> -->
 		</modal>
 		<modal ref="modal" :once="true" :z="allModal.modal.z">
-			<view :class="modalType == 'classDetail' ? '' : 'display-none'"><class-detail-modal /></view>
+			<view :class="modalType == 'classDetail' ? '' : 'display-none'">
+				<class-detail-modal />
+			</view>
 			<plugin-background v-if="modalType == 'background'" />
 			<time-picker v-else-if="modalType == 'timePicker'" />
 			<plugin-notice v-else-if="modalType == 'notice'" />
@@ -23,8 +25,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { APIs } from '@/staticData/staticData.js';
-import { getStorageSync } from '@/commonFun.js';
+import { getStorageSync, clearCountTimes, getCurrentWeek } from '@/commonFun.js';
 import custom from '@/pages/schedule/custom/custom.vue';
 import scheduleContent from '@/pages/schedule/schedule_content/schedule-content.vue';
 import classDetailModal from '@/pages/schedule/schedule_content/schedule_components/schedule_week/week-class-detail-modal.vue';
@@ -59,12 +62,14 @@ export default {
 	},
 	// #ifdef MP
 	created() {
+		// this.schoolOpening().catch(e => console.log(e));
 		this.$on('changeShareParams', params => (this.shareParams = params));
+		this.schoolOpening().catch(e => console.log(e));
 	},
 	onLoad(query) {
 		uni.showShareMenu();
 		this.update();
-        this.checkOldUser();
+		this.checkOldUser();
 		if (query.params !== undefined) {
 			this.showModal({
 				type: 'bottomModal',
@@ -78,14 +83,16 @@ export default {
 		const isButton = res.from === 'button';
 		return {
 			title: isButton ? 'gdutday-转发课程' : '颜值超高的课表小程序-gdutday分享给你',
-			path: `/pages/schedule/schedule${isButton ? '?params=' + JSON.stringify(this.shareParams) : ''}`
+			path: `/pages/schedule/schedule${
+				isButton ? '?params=' + JSON.stringify(this.shareParams) : ''
+			}`
 		};
 	},
-    onShareTimeline(){
-        return {
-            title: '颜值超高的课表小程序-gdutday分享给你',
-        };
-    },
+	onShareTimeline() {
+		return {
+			title: '颜值超高的课表小程序-gdutday分享给你'
+		};
+	},
 	// #endif
 	data() {
 		return {
@@ -141,18 +148,21 @@ export default {
 					} = await this.$http.get(APIs.version);
 					const beforeVersion = getStorageSync('version', '1.0.0');
 					//如果版本号不匹配则说明未看过更新说明
-					if (beforeVersion !== version && (this.$account.ID !== '' || this.$education.ID !== '')) {
-                        let that = this;
+					if (
+						beforeVersion !== version &&
+						(this.$account.ID !== '' || this.$education.ID !== '')
+					) {
+						let that = this;
 						uni.showModal({
 							title: '更新说明',
 							content: '您已更新至最新版本，是否要查看更新说明 ? ',
 							confirmColor: this.$commonFun.hexify(this.$colorList.theme),
 							confirmText: '查看',
-                            success (res) {
-                                if(res.confirm) {
-                                    that.$Router.push({ name: 'mark' })
-                                }
-                            }
+							success(res) {
+								if (res.confirm) {
+									that.$Router.push({ name: 'mark' });
+								}
+							}
 							// success: e => this.$Router.push({ name: 'mark' })
 						});
 						uni.setStorageSync('version', version);
@@ -160,26 +170,55 @@ export default {
 				}
 			});
 			// #endif
-            
 		},
-        checkOldUser() {
-            var version = uni.getStorageSync('version');
-            var id = this.$education.ID;
-            if (id == "" && version != "1.0.0") {
-                let that = this;
-                uni.showModal({
-                	title: '提示',
-                	content: '检查到您是老用户,由于特殊原因gdutday转移使用教务系统登录,劳烦绑定教务系统登录,以保证正常使用',
-                	confirmColor: this.$commonFun.hexify(this.$colorList.theme),
-                	confirmText: '前往',
-                    success (res) {
-                        if(res.confirm) {
-                            that.$Router.push({ name: 'login' });
-                        }
-                    }
-                });
-            }
-        }
+		// 检测开学日期
+		async schoolOpening() {
+			const {
+				data: { schoolOpening }
+			} = await this.$http.get(APIs.getSchoolOpening);
+			var oldTime = uni.getStorageSync('schoolOpening');
+			if (oldTime !== schoolOpening) {
+				let content =
+					'检测到本地开学日期与服务器最新开学时间不一致\n点击确定后更新开学日期并跳转至登录界面\n';
+				let that = this;
+				uni.showModal({
+					showCancel: false,
+					title: '提示',
+					content: content,
+					success: () => {
+						uni.setStorageSync('schoolOpening', schoolOpening);
+						clearCountTimes();
+						this.$store.commit({
+							type: 'changeStateofSchedule',
+							stateName: 'week',
+							value: getCurrentWeek()
+						});
+						Vue.prototype.$currentWeek = getCurrentWeek();
+						this.$emit('changeSchoolOpening');
+						that.$Router.push({ name: 'login' });
+					}
+				});
+			}
+		},
+		checkOldUser() {
+			var version = uni.getStorageSync('version');
+			var id = this.$education.ID;
+			if (id == '' && version != '1.0.0') {
+				let that = this;
+				uni.showModal({
+					title: '提示',
+					content:
+						'检查到您是老用户,由于特殊原因gdutday转移使用教务系统登录,劳烦绑定教务系统登录,以保证正常使用',
+					confirmColor: this.$commonFun.hexify(this.$colorList.theme),
+					confirmText: '前往',
+					success(res) {
+						if (res.confirm) {
+							that.$Router.push({ name: 'login' });
+						}
+					}
+				});
+			}
+		}
 	}
 };
 </script>

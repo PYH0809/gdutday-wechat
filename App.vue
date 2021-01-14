@@ -5,6 +5,7 @@ import {
 	getStorageSync,
 	getCurrentWeek,
 	openSchoolChangeTips,
+	clearCountTimes,
 	commonFun,
 	getClassAndExam
 } from '@/commonFun.js';
@@ -82,32 +83,9 @@ export default {
 	onHide: function() {
 		console.log('App Hide');
 	},
-	created() {
-		this.schoolOpening().catch(e => console.log(e));
-	},
-	methods: {
-		async schoolOpening() {
-			const {
-				data: { schoolOpening }
-			} = await http.get(APIs.getSchoolOpening);
-			var oldTime = uni.getStorageSync('schoolOpening');
-			uni.setStorageSync('schoolOpening', schoolOpening);
-			if (oldTime !== schoolOpening) {
-                let content = "检测到本地时间与服务器时间不一致\n点击确定后将重新跳转登录以更新课程\n请更新完后重启小程序同步时间";
-                let that = this;
-                uni.showModal({
-                    showCancel: false,
-                    title: "提示",
-                    content: content,
-                    success() {
-                        Vue.prototype.$currentWeek = getCurrentWeek();
-                        Vue.prototype.$currentDay = (new Date().getDay() || 7) - 1;
-                        that.$Router.push({ name: 'login' });
-                    }
-                });
-			}
-		}
-	}
+	// methods: {
+		
+	// }
 };
 </script>
 
