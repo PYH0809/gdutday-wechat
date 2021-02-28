@@ -84,6 +84,7 @@ export default {
 	},
 	created() {
 		this.schoolOpening().catch(e => console.log(e));
+        this.getNotice().catch(e => console.log(e));
 	},
 	methods: {
 		async schoolOpening() {
@@ -106,7 +107,38 @@ export default {
                     }
                 });
 			}
-		}
+		},
+        async getNotice() {
+            const {
+            	data: { msg,
+                        id,
+                        important}
+            } = await http.get(APIs.tip);
+            var tip = uni.getStorageSync('notice');
+            if (tip != id) {
+                let that = this;
+                let title = "提示"
+                if (important == true) {
+                    title = "重要提示"
+                } else {
+                    uni.setStorageSync('notice', id);
+                }
+                uni.showModal({
+                    showCancel: false,
+                    title: title,
+                    content: msg,
+                    showCancel: true,
+                    cancelText: "取消", // 取消按钮的文字  
+                    confirmText: "我已知晓", // 确认按钮文字  
+                    success: (res)=> {
+                        if(res.confirm) {
+                            uni.setStorageSync('notice', id);
+                            // console.log("我已知晓")
+                        }
+                    }
+                });
+            }
+        }
 	}
 };
 </script>
