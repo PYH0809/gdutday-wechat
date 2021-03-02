@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import gradeConfig from '@/pages/grade/grade-config.vue';
+import gradeConfig from '@/pages/grade/grade-config/grade-config.vue';
 import columnExample from '@/pages/grade/grade-charts/grade-column/column-example.vue';
 import allGradeScoresColumn from '@/pages/grade/grade-charts/grade-column/all-grade-scores.vue';
 import getPoleColumn from '@/pages/grade/grade-charts/grade-column/get-pole.vue';
@@ -87,6 +87,13 @@ export default {
 	// onReady() {
 	// 	this.$emit('changeGradeConfig');
 	// },
+	onShow() {
+		const exceptGradeLength = this.$store.state.grade.exceptGrade.length;
+		if (exceptGradeLength !== this.exceptGradeLength) {
+			this.$emit('changeGradeConfig');
+		}
+		this.exceptGradeLength = exceptGradeLength;
+	},
 	onPullDownRefresh() {
 		this.refreshGradeByEdu();
 		// this.getGrade();

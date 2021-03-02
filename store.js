@@ -38,6 +38,7 @@ let store = new Vuex.Store({
 		uuid:''
 	},
 	mutations: {
+		// 此 mutation 可以修改全部全局变量
 		changeStateofGlobal: ChangeAndStorageState,
 		changeOtherTheme(state, par) {
 			state.allColor.otherTheme = par;
@@ -52,6 +53,7 @@ let store = new Vuex.Store({
 	}
 })
 const computed = {
+	// 全局混入computed
 	computed: {
 		$uuid(){
 			return store.state.uuid;

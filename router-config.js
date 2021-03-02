@@ -8,22 +8,22 @@ export default {
 		// 	path: "/pages/login/login",
 		// 	name: 'login'
 		// },
-        {
-        	path: "/pages/login/login-edu",
-        	name: 'login'
-        },
-        {
-        	path: "/pages/login/login-edu",
-        	name: 'login-edu'
-        },
+		{
+			path: "/pages/login/login-edu",
+			name: 'login'
+		},
+		{
+			path: "/pages/login/login-edu",
+			name: 'login-edu'
+		},
 		{
 			path: "/pages/my/my-mark/my-mark",
 			name: 'mark'
 		},
-        {
-        	path: "/pages/my/my-task/my-task",
-        	name: 'task'
-        },
+		{
+			path: "/pages/my/my-task/my-task",
+			name: 'task'
+		},
 		{
 			path: "/pages/my/my-clear/my-clear",
 			name: 'clear'
@@ -40,17 +40,21 @@ export default {
 			path: "/pages/my/my-about/my-about",
 			name: 'about'
 		},
-        {
-        	path: "/pages/my/my-problem/my-problem",
-        	name: 'problem'
-        },
-        {
-        	path: "/pages/my/my-open/my-open",
-        	name: 'open'
-        },
+		{
+			path: "/pages/my/my-problem/my-problem",
+			name: 'problem'
+		},
+		{
+			path: "/pages/my/my-open/my-open",
+			name: 'open'
+		},
 		{
 			path: "/pages/grade/grade",
 			name: 'grade'
+		},
+		{
+			path: "/pages/grade/grade-config/grade-config-except",
+			name: 'exceptGrade'
 		},
 		{
 			path: '/pages/grade/grade-find/grade-find',
@@ -68,10 +72,10 @@ export default {
 			path: "/pages/file/file-detail/file-detail",
 			name: 'file_detail'
 		},
-        {
-        	path: "/pages/exam/exam",
-        	name: 'exam'
-        },
+		{
+			path: "/pages/exam/exam",
+			name: 'exam'
+		},
 		{
 			path: "/pages/rubbish/rubbish",
 			name: 'rubbish'
@@ -92,17 +96,17 @@ export default {
 			name: 'deleteCourse'
 		},
 		{
-		    path : "/pages/news/news",
-		    name : 'news'
-		},{
-		    path : "/pages/news/news-detail",
-		    name : 'newsDetail'
-		},{
-			path:"/pages/library/douban",
-			name:"douban"
-		},{
-			path:"/pages/card-orc/card-orc",
-			name:"orc"
+			path: "/pages/news/news",
+			name: 'news'
+		}, {
+			path: "/pages/news/news-detail",
+			name: 'newsDetail'
+		}, {
+			path: "/pages/library/douban",
+			name: "douban"
+		}, {
+			path: "/pages/card-orc/card-orc",
+			name: "orc"
 		},
 		...Array.from({
 			length: 10

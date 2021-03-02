@@ -1,8 +1,16 @@
 <template>
 	<view>
-		<view class="qiun-bg-white qiun-title-bar qiun-common-mt"><view class="qiun-title-dot-light">选项</view></view>
+		<view class="qiun-bg-white qiun-title-bar qiun-common-mt">
+			<view class="qiun-title-dot-light">选项</view>
+		</view>
 		<ripple>
-			<picker class="hg " mode="selector" :value="index" :range="cloudSelectTerms" @change="changeSelectTerms">
+			<picker
+				class="hg "
+				mode="selector"
+				:value="index"
+				:range="cloudSelectTerms"
+				@change="changeSelectTerms"
+			>
 				<view class="hg px-5 flex-row bg-white j-sb">
 					<view>学期范围</view>
 					<text :style="$themeFont">{{ selectTerms }}</text>
@@ -12,7 +20,17 @@
 		<ripple>
 			<view class="hg flex-row j-sb px-5 bg-white">
 				<view>包含公选课</view>
-				<switch :checked="isIncludeOptionalCourse" @change="optionChange" :color="isIncludeOptionalCourse ? $colorList.theme : '#8799A3'" />
+				<switch
+					:checked="isIncludeOptionalCourse"
+					@change="optionChange"
+					:color="isIncludeOptionalCourse ? $colorList.theme : '#8799A3'"
+				/>
+			</view>
+		</ripple>
+		<ripple>
+			<view @tap="toExcept" class="hg flex-row j-sb px-5 bg-white">
+				<view>排除课程</view>
+				<text :style="$themeFont" >点击查看</text>
 			</view>
 		</ripple>
 	</view>
@@ -35,7 +53,20 @@ export default {
 			return this.$store.state.grade.selectTerms;
 		},
 		cloudSelectTerms() {
-			const allTerms = ['大一上', '大一下', '大一全', '大二上', '大二下', '大二全', '大三上', '大三下', '大三全', '大四上', '大四下', '大四全'],
+			const allTerms = [
+					'大一上',
+					'大一下',
+					'大一全',
+					'大二上',
+					'大二下',
+					'大二全',
+					'大三上',
+					'大三下',
+					'大三全',
+					'大四上',
+					'大四下',
+					'大四全'
+				],
 				end = 3 * parseInt(this.grade.length / 2) + (this.grade.length % 2),
 				terms = allTerms.slice(0, end);
 			terms.push('大学全');
@@ -64,6 +95,11 @@ export default {
 				toStorage: true
 			});
 			this.Bus.$emit('changeGradeConfig');
+		},
+		toExcept(){
+			this.$Router.push({
+				name: 'exceptGrade'
+			});
 		},
 		terms() {}
 	}

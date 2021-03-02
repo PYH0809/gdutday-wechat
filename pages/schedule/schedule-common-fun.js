@@ -2,7 +2,7 @@ import {
 	thisCampusTime
 } from '@/staticData/staticData.js'
 import commonFun from '@/commonFun.js'
-export function productClassData(par={}) {
+export function productClassData(par = {}) {
 	// {
 	// 	week:[],
 	// 	name:'',
@@ -24,11 +24,13 @@ export function productClassData(par={}) {
 			courseContent: '',
 			courseWeek: item + 1 + ''
 		})),
-		isAdd: true ,//源数据,
-		addTag:par.addTag
+		isAdd: true, //源数据,
+		addTag: par.addTag
 	};
 	return data;
 }
+
+// 判断输入的时间是否重叠 格式 10:00
 export function computedTimeConflict(a, b) {
 	const s_a = commonFun.computedTimeString(a.start, "0:0", "-");
 	const s_b = commonFun.computedTimeString(b.start, "0:0", "-");
@@ -41,6 +43,7 @@ export function computedTimeConflict(a, b) {
 	return diff_a.some(item => diff_b.indexOf(item) > -1);
 }
 
+
 export function handleCourseTimeString(item, during) {
 	const start = +item.slice(0, 2)
 	const long = item.length / 2;
@@ -50,11 +53,14 @@ export function handleCourseTimeString(item, during) {
 	};
 }
 
-export function textConflict({ parms,ClassAndExam = [],during = thisCampusTime } = {} ) {
-	//检测冲突
-	//ClassAndExam为两者数据,这个是未处理数据
-	//week和day都是从0开始;start,end输入以下格式11:30 或者11:08;
-	// debugger;
+//检测冲突
+//ClassAndExam为两者数据,这个是未处理数据
+//week和day都是从0开始;start,end输入以下格式11:30 或者11:08;
+export function testConflict({
+	parms,
+	ClassAndExam = [],
+	during = thisCampusTime
+} = {}) {
 	const {
 		day,
 		start,
@@ -62,7 +68,7 @@ export function textConflict({ parms,ClassAndExam = [],during = thisCampusTime }
 	} = parms;
 	let result = []; //返回冲突周数,课程名称,课程时间
 	ClassAndExam.forEach(item => {
-		const time = item.courseTime ? handleCourseTimeString(item.courseTime,during) : {
+		const time = item.courseTime ? handleCourseTimeString(item.courseTime, during) : {
 			start: item.examTime.split('--')[0],
 			end: item.examTime.split('--')[1]
 		}
@@ -77,7 +83,7 @@ export function textConflict({ parms,ClassAndExam = [],during = thisCampusTime }
 					start: time.start,
 					end: time.end,
 					name: item.examSubject,
-					isExam : true
+					isExam: true
 				})
 			} else {
 				result.push({
