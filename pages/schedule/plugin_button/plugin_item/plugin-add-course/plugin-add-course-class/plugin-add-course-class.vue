@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { textConflict } from '@/pages/schedule/schedule-common-fun.js';
+import { testConflict } from '@/pages/schedule/schedule-common-fun.js';
 import { diffCampusTime } from '@/staticData/staticData.js';
 import { wait } from '@/commonFun.js';
 let confirm;
@@ -338,7 +338,7 @@ export default {
 				...handlePrimeClassData,
 				...this.$store.state.schedule.examData
 			];
-			textConflict({
+			testConflict({
 				parms: parms,
 				ClassAndExam: allClassData,
 				during: this.during

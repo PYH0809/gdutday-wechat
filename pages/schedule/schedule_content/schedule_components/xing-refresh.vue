@@ -198,7 +198,7 @@ export default {
 				//重置手指数防止bug;
 			}, 200);
 			this.fingers--;
-			if (this.status == 3 || this.fingers != 0) return; //防止多指下滑问题 , 匹配手指 只用到最后一次touchend;栈的思想
+			if (this.status == 3 || this.fingers != 0) return; //防止多指下滑问题 , 匹配手指 只用到最后一次touchend;栈
 			this.isTouch = false;
 			if (this.indexStatus) {
 				this.indexStatus = 0;

@@ -47,6 +47,10 @@ Vue.prototype.$http = http;
 Vue.prototype.$APIs = APIs;
 Vue.prototype.$httpWithSession = httpWithSession;
 
+// 初始化云调用
+wx.cloud.init({
+	env:'xingxinglieo-tecft'
+})
 Vue.config.productionTip = true;
 App.mpType = 'app'
 const app = new Vue({

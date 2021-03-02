@@ -5,6 +5,7 @@ import {
 	getStorageSync,
 	getCurrentWeek,
 	openSchoolChangeTips,
+	clearCountTimes,
 	commonFun,
 	getClassAndExam
 } from '@/commonFun.js';

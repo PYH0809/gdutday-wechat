@@ -10,7 +10,8 @@ export default {
 	state: {
 		grade: commonFun.getStorageSync('grade', [], true),
 		isIncludeOptionalCourse: commonFun.getStorageSync('isIncludeOptionalCourse', false),
-		selectTerms: commonFun.getStorageSync('selectTerms', '大学全')
+		selectTerms: commonFun.getStorageSync('selectTerms', '大学全'),
+		exceptGrade: commonFun.getStorageSync('exceptGrade', [], true)
 	},
 	mutations: {
 		changeStateofGrade: commonFun.ChangeAndStorageState,
@@ -25,11 +26,11 @@ export default {
 				}
 				return item;
 			}
-			return state.grade.length > 0 
-			? deepCopy(state.grade)
+			return state.grade.length > 0 ?
+				deepCopy(state.grade)
 				.map(cutLength)
-				.filter(item=> !(item.examType === '重修')) 
-			: defaultGrade;
+				.filter(item => !(item.examType === '重修')) :
+				defaultGrade;
 		},
 		gradeAddColor(state, getters) {
 			return getters.grade.map(item => {
@@ -38,10 +39,14 @@ export default {
 			});
 		},
 		filterOptionalGrade(state, getters) {
-			//是否选择必修的过滤
-			return state.isIncludeOptionalCourse ?
+			// 用户选择的过滤
+			// 是否过滤非公选课
+			let result = state.isIncludeOptionalCourse ?
 				getters.gradeAddColor :
 				getters.gradeAddColor.filter(nextItem => !(nextItem.readMethod == '选修' && nextItem.classType == "公共选修课"));
+			// 过滤排除的课程	
+			result = result.filter(item => !(state.exceptGrade.includes(item.examName)))
+			return result
 		},
 		classifyGrade(state, getters) {
 			// 对成绩进行分组

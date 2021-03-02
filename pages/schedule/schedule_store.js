@@ -6,7 +6,7 @@ import {
 	deepCopy,
 } from "@/commonFun.js";
 import {
-	textConflict,
+	testConflict,
 	productClassData,
 } from "@/pages/schedule/schedule-common-fun.js";
 import {
@@ -70,7 +70,7 @@ export default {
 			return deepCopy(getters.handlePrimeClassData).map((item, index) => {
 				// debugger;
 				const s = 1 * item.courseTime.slice(0, 2) - 1, //从0开始
-					data = textConflict({
+					data = testConflict({
 						parms: {
 							start: getters.thisCampusTime[s].start,
 							end: getters.thisCampusTime[

@@ -47,7 +47,11 @@
 			"style": {
 				"enablePullDownRefresh": true
 			}
-		}, {
+		},{
+			"path": "pages/grade/grade-config/grade-config-except",
+			"style": {}
+		},
+		{
 			"path": "pages/grade/grade-find/grade-find",
 			"style": {}
 		},
@@ -140,6 +144,9 @@
         }
         ,{
             "path" : "pages/my/my-open/my-open",
+            "style" : {}
+        },{
+            "path" : "pages/card-orc/card-orc",
             "style" : {}
         }
     ],

@@ -43,8 +43,9 @@ export default {
 			return this.$store.getters.gradeAddColor;
 		},
 		filterGrade() {
-			if (this.value === '') return this.grade;
-			else return this.grade.filter(item => item.examName.indexOf(this.value) > -1);
+			const result = [...this.grade].reverse()
+			if (this.value === '') return result;
+			else return result.filter(item => item.examName.indexOf(this.value) > -1);
 		},
 		style() {
 			var StatusBar = this.StatusBar;

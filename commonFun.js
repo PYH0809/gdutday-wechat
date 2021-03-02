@@ -47,9 +47,10 @@ export function getStorageSync(key, def, toJSONparse = false) {
 }
 
 //开学日期
-let termStart = getStorageSync('schoolOpening', "2020.9.7");
+// let termStart = getStorageSync('schoolOpening', "2020.9.7");
 //输入距离开学日期的天数,输出日期
 export function getDate(intervalDay) {
+	let termStart = getStorageSync('schoolOpening', "2020.9.7");
 	const start = termStart.split("."),
 		inputTime = new Date(
 			intervalDay * 86400000 +
@@ -59,6 +60,7 @@ export function getDate(intervalDay) {
 }
 //获取现在的周数(相对于开学日期)
 export function getWeek() {
+	let termStart = getStorageSync('schoolOpening', "2020.9.7");
 	const start = termStart.split("."),
 		diff =
 		new Date().getTime() -
@@ -73,10 +75,10 @@ export function getCurrentWeek() {
 	else if (week > 19) return 19;
 	else return week;
 }
-const week = getCurrentWeek();
 
 //记录每周刷新课表次数
 export function countTimes() {
+	const week = getCurrentWeek();
 	uni.getStorage({
 		key: "countTimes",
 		success: res => {
@@ -87,6 +89,14 @@ export function countTimes() {
 		}
 	});
 }
+
+export function clearCountTimes() {
+	uni.setStorageSync('countTimes', JSON.stringify(Array.from({
+		length: 20
+	}, () => 0), ))
+}
+
+
 //局部重载方法 不过可以通过key++来替代
 export function reMount(par, that, fn) {
 	//局部重载方法
@@ -453,7 +463,7 @@ export function getTimeToCnameTime(stringTime) {
 	let time = time1 - time2;
 	let result = null;
 	if (time < 0) {
-        result = "你时间很怪耶";
+		result = "你时间很怪耶";
 	} else if (time / month >= 1) {
 		result = parseInt(time / month) + "月前";
 	} else if (time / week >= 1) {
@@ -488,9 +498,9 @@ export function getLastExam() {
 	examList.forEach(it => {
 		it.examCountDown = getDayDiff(it.examDate);
 		if (it.examCountDown >= 0) {
-            if (last == null) {
-                last = it;
-            }
+			if (last == null) {
+				last = it;
+			}
 			if (it.examCountDown < last.examCountDown) {
 				last = it;
 			}
