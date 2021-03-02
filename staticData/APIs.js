@@ -23,6 +23,7 @@ export const APIs = {
 	open: baseDataUrl + "/open",
 	update: baseDataUrl + "/update",
 	version: baseDataUrl + "/version",
+	tip: baseDataUrl + "/tip",
 	task: baseDataUrl + "/task",
 	problem: baseDataUrl + "/problem",
 	location: baseDataUrl + "/locations",
