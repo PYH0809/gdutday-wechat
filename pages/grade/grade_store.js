@@ -45,7 +45,7 @@ export default {
 				getters.gradeAddColor :
 				getters.gradeAddColor.filter(nextItem => !(nextItem.readMethod == '选修' && nextItem.classType == "公共选修课"));
 			// 过滤排除的课程	
-			result = result.filter(item => !(state.exceptGrade.includes(item.examName)))
+			result = result.filter(item => !(state.exceptGrade.includes(item.examTime + item.examName)))
 			return result
 		},
 		classifyGrade(state, getters) {
@@ -118,17 +118,17 @@ export default {
 				all
 			};
 		},
-		allScoresPole(state, getters) {
-			let get = 0,
-				all = 0;
-			getters.grade.forEach(item => {
-				get = +item.credit * item.examPole + get;
-				all = +item.credit + all;
-			});
-			return {
-				get,
-				all
-			};
-		},
+		// allScoresPole(state, getters) {
+		// 	let get = 0,
+		// 		all = 0;
+		// 	getters.filterOptionalGrade.forEach(item => {
+		// 		get = +item.credit * item.examPole + get;
+		// 		all = +item.credit + all;
+		// 	});
+		// 	return {
+		// 		get,
+		// 		all
+		// 	};
+		// },
 	}
 }
