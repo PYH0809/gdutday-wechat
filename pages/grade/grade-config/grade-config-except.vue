@@ -29,9 +29,9 @@
 						</view>
 					</view>
 					<switch
-						:checked="exceptGrade.includes(item.examName)"
+						:checked="exceptGrade.includes(item.examTime + item.examName)"
 						@change="optionChange($event, index)"
-						:color="exceptGrade.includes(item.examName) ? $colorList.theme : '#8799A3'"
+						:color="exceptGrade.includes(item.examTime + item.examName) ? $colorList.theme : '#8799A3'"
 					/>
 					<!-- <view class="mr-5" style="width: 96rpx;">
 								<view class="text-right text-df" :style="'color:' + item.color">{{ item.examPole }}</view>
@@ -69,6 +69,7 @@ export default {
 			return [...this.$store.getters.gradeAddColor].reverse();
 		},
 		exceptGrade() {
+			// console.log(this.grade)
 			return this.$store.state.grade.exceptGrade;
 		},
 		// filterGrade() {
@@ -79,7 +80,7 @@ export default {
 	methods: {
 		optionChange(e, i) {
 			const value = [...this.exceptGrade];
-			const name = this.grade[i].examName;
+			const name = this.grade[i].examTime + this.grade[i].examName;
 			if (e.detail.value) {
 				value.push(name);
 			} else {
