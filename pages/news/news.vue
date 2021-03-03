@@ -1,23 +1,30 @@
 <template>
 	<view class="body-background" style="min-height: 100vh;">
-		<cu-custom isBack>
-			<template v-slot:content>
-				校内新闻
-			</template>
-		</cu-custom>
+        <custom-input :focus="false" v-model="value" placeholder="输入关键字搜索"><block slot="content">校内新闻</block></custom-input>
         <empty-tip v-if="isEmpty === true" loading></empty-tip>
-		<view class="list-container">
+		<!-- <view class="list-container">
 			<view class="list" v-for="(list,listIndex) of viewList" :key="listIndex">
 				<view class="item px-3 drop-shadow active-shadow" v-for="(item,index) of list.list" :key="index">
 					<view @tap="getNewsDetail(item.newsId,item.newsTitle)">
 						<view :id="item.newsId" class="news-title ">{{item.newsTitle}}</view>
 						<view class="news-owner ">{{item.newsOwner}}</view>
                         <view class="news-time">{{item.newsTime}}</view>
-						<!-- <view class="news-type ">{{item.newsType}}</view> -->
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
+        <view class="list" v-for="(item,index) of viewList" :key="index">
+        	<view class="item px-3 drop-shadow active-shadow">
+        		<view @tap="getNewsDetail(item.newsId,item.newsTitle)">
+        			<view :id="item.newsId" class="news-title">{{item.newsTitle}}</view>
+                    <view class="news-text">{{item.newsText}}</view>
+                    <view class="news-mix">
+                        <view class="news-owner">{{item.newsOwner}}</view>
+                        <view class="news-time">{{item.newsTime}}</view>
+                    </view>
+        		</view>
+        	</view>
+       </view>
 		<view v-show="isLoadMore">
 			<uni-load-more :status="loadStatus"></uni-load-more>
 		</view>
@@ -28,9 +35,11 @@
 import { APIs } from '@/staticData/staticData.js';
 import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 import {getTimeToCnameTime} from '@/commonFun.js';
+import customInput from '@/components/custom-input.vue';
 export default {
 	components:{
-		uniLoadMore
+		uniLoadMore,
+        customInput
 	},
 	data() {
 		return {
@@ -39,7 +48,8 @@ export default {
             isEmpty:true,
 			flagList:0,
 			pageNum:1,
-			viewList:[{list:[]},{list:[]}],
+			viewList:[],
+            value: '',
 		}
 	},
 	async mounted() {
@@ -83,16 +93,13 @@ export default {
 		putInfoToList(dataList) {
 			let _this = this;
 			dataList.forEach(item => {
-				let listFlag = _this.flagList % 2;
-				_this.flagList++;
-				this.viewList[listFlag].list.push(item)
+				this.viewList.push(item)
 			})
 		},
 	},
 	onPullDownRefresh() {
 		this.pageNum = 1;
-		this.flagList = 0;
-		this.viewList = [{list:[]},{list:[]}];
+		this.viewList = [];
 		this.getNewsList();
 	},
 	onReachBottom(){
@@ -103,41 +110,52 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-    .list-container
-        display flex
-        justify-content space-between
-        align-items:flex-start
-        padding-left: 30rpx
-        padding-right: 30rpx
-        // padding 0 24rpx
-        padding-top: 40rpx
         .list
-            width calc(50% - 25rpx)
+            padding-top: 40rpx
+            padding-left: 30rpx
+            width calc(100% - 30rpx)
             display flex
             flex-direction column
             .item
-                margin-bottom 40rpx
-                // border-radius: 35px
                 .news-title
                     margin-top 18rpx
                     font-size 35rpx;
                     font-weight:bold;
-                .news-owner
-                    font-size 20rpx
-                .news-type
-                    font-size 20rpx
-                .news-time
-                    font-size 20rpx
-                    margin-bottom 18rpx
+                .news-text
+                    margin-top 15rpx
+                    font-size 30rpx
+                    margin-bottom 15rpx
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    display: -moz-box;
+                    -moz-line-clamp: 2;
+                    -moz-box-orient: vertical;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    white-space: normal;    
+                .news-mix
+                        display:flex;
+                        justify-content:space-between;
+                    .news-owner
+                        font-size 20rpx
+                    .news-type
+                        font-size 20rpx
+                    .news-time
+                        font-size 20rpx
+                        right: 0px;
+                        margin-bottom 18rpx
 </style>
 <style>
 .body-background {
-    background: #dde5e9;
+    background: #f5f5f5;
 }
 .drop-shadow {
-    border-radius: 33rpx;
-    background: #dde5e9;
-    box-shadow:  13rpx 13rpx 26rpx #acb3b6, 
-                 -13rpx -13rpx 26rpx #ffffff;
+border-radius: 35rpx;
+background: #f5f5f5;
+box-shadow:  14rpx 14rpx 28rpx #e4e4e4,
+             -14rpx -14rpx 28rpx #ffffff;
 }
 </style>

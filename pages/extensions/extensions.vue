@@ -86,7 +86,7 @@ export default {
 				{
 					icon: 'classroom',
 					description: '空教室查询',
-					operation: this.openWait
+					operation: this.openOCR
 				},
 				{
 					icon: 'evaluate',
@@ -198,6 +198,11 @@ export default {
 					});
 			}
 		},
+        openOCR() {
+        	this.$Router.push({
+        		name: 'orc'
+        	});
+        },
 		openMap() {
 			uni.navigateTo({
 				url: '/pages/map/map?fromHome=1'
