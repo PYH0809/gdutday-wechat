@@ -30,7 +30,7 @@ export const APIs = {
 	details: baseDataUrl + "/details/",
 	getSchoolOpening: baseDataUrl + "/openSchool",
 	locationLength: baseDataUrl + "/length",
-	getNewsList: baseNewsUrl + "/news/type",
+	getNewsList: baseNewsUrl + "/news/keyword",
 	getNewsDetail: baseNewsUrl + "/news/id",
 	// getSchoolOpening: baseFunctionsUrl + "/getSchoolOpening",
 	getRecommendBook: 'https://ifl.zhaobenshu.com/Logs/stvisitkey_ifa_GetList.ashx?a=[Lib={{gdut}}][StArea={{StWeek}}][UniSess={{}}][SessLib={{gdut}}][SessFun={{wap}}][SessPrd={{book}}][SessType={{3}}]&z3=&z4=0&z5=',

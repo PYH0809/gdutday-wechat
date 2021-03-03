@@ -41,6 +41,13 @@ export default {
 		uniLoadMore,
         customInput
 	},
+    watch:{
+        value() {
+            this.pageNum = 1;
+            this.viewList = [];
+            this.getNewsList();
+        }
+    },
 	data() {
 		return {
 			isLoadMore:false,
@@ -68,7 +75,7 @@ export default {
 				} = await this.$commonFun.rePromise({
 					PromiseFunction: this.$http.get.bind(this.$http),
 					parms: [
-						APIs.getNewsList+"?pageNum=" + this.pageNum + "&pageSize=20"
+						APIs.getNewsList+"?pageNum=" + this.pageNum + "&pageSize=10"+"&keyword="+this.value
 					]
 				});
 				if (+error == 1) {
