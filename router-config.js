@@ -41,6 +41,10 @@ export default {
 			name: 'about'
 		},
 		{
+			path: "/pages/my/my-about/office",
+			name: 'office'
+		},
+		{
 			path: "/pages/my/my-problem/my-problem",
 			name: 'problem'
 		},

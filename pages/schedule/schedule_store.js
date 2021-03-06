@@ -34,6 +34,7 @@ export default {
     // countTimes: getStorageSync("countTimes", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],true), //校区
     campus: getStorageSync('campus', '大学城校区'), //校区
     courseBlockOpacity: getStorageSync('courseBlockOpacity', 80),
+	backgroundBlur: getStorageSync('backgroundBlur', 0),
     isFontColorWhite: getStorageSync('isFontColorWhite', true),
     isPassedCourseBlockGray: getStorageSync('isPassedCourseBlockGray', true)
   },

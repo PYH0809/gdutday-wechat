@@ -3,8 +3,12 @@
 		<view
 			class="position-relative flex-1 bg-white bg-img overflow-hidden"
 			id="content"
-			:style="backgroundString"
 		>
+			<!-- :style="backgroundString" -->
+			<view
+				class="position-absolute w-1 h-1 top-0 left-0 bg-img"
+				:style="backgroundString + backgroundBlurString"
+			/>
 			<xing-refresh
 				@pushToInterrupt="shake"
 				v-if="scrollHeight && delay"
@@ -85,10 +89,7 @@ export default {
 				},
 				() => null
 			),
-			backgroundImage: this.$commonFun.getStorageSync(
-				'backgroundImage',
-				''
-			),
+			backgroundImage: this.$commonFun.getStorageSync('backgroundImage', ''),
 			backgroundString: '',
 			reMountMark: true,
 			scrollHeight: 0,
@@ -113,6 +114,12 @@ export default {
 		},
 		firstIndex() {
 			return this.$store.state.schedule.firstIndex;
+		},
+		blur() {
+			return this.$store.state.schedule.backgroundBlur;
+		},
+		backgroundBlurString() {
+			return `filter:blur(${this.blur}px);`;
 		}
 	},
 	beforeDestroy() {
@@ -205,13 +212,13 @@ export default {
 					// 				toStorage: true,
 					// 				toStringify: true
 					// 			});
-     //                            this.$store.commit({
-     //                            	type: 'changeStateofSchedule',
-     //                            	stateName: 'examNewData',
-     //                            	value: exam,
-     //                            	toStorage: true,
-     //                            	toStringify: true
-     //                            });
+					//                            this.$store.commit({
+					//                            	type: 'changeStateofSchedule',
+					//                            	stateName: 'examNewData',
+					//                            	value: exam,
+					//                            	toStorage: true,
+					//                            	toStringify: true
+					//                            });
 					// 			this.$store.commit({
 					// 				type: 'changeStateofSchedule',
 					// 				stateName: 'examData',
@@ -258,10 +265,7 @@ export default {
 				i = this.$commonFun.getStorageSync('noticeTime', 0),
 				day = this.$currentDay;
 			range.push(Infinity); //总长是42
-			if (
-				i &&
-				this.$store.getters.courseData[this.$currentWeek][day].length
-			) {
+			if (i && this.$store.getters.courseData[this.$currentWeek][day].length) {
 				const classStar = this.$store.getters.thisCampusTime.map(
 						(item, index) => {
 							return (
@@ -272,9 +276,7 @@ export default {
 					),
 					todayMinutes = date.getHours() * 60 + date.getMinutes(),
 					//因为get的日期是从星期日开始的 所以 必须判断这个特殊情况
-					courseData = this.$store.getters.courseData[
-						this.$currentWeek
-					]
+					courseData = this.$store.getters.courseData[this.$currentWeek]
 						.slice(day, day + 2)
 						.map((item, index) => {
 							return item.sort((a, b) => a.begin - b.begin);
@@ -316,9 +318,7 @@ export default {
 						});
 					} else {
 						this.backgroundString =
-							'background-image:url(' +
-							this.backgroundImage +
-							');';
+							'background-image:url(' + this.backgroundImage + ');';
 					}
 				}
 			});

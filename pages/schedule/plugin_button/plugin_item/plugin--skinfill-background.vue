@@ -12,14 +12,30 @@
 			<view>课程块不透明度</view>
 			<slider
 				style="width:300rpx;margin: 0px;"
-				@changing="sliderChangeing"
-				@change="sliderChange"
+				@changing="opacityChangeing"
+				@change="opacityChange"
 				:activeColor="$colorList.theme"
 				:block-color="$colorList.white"
 				:value="opacity"
 				:min="10"
 				:block-size="20"
 				:step="5"
+				show-value
+			/>
+		</view>
+		<view class="hg flex-row j-sb px-4">
+			<view>背景高斯模糊度</view>
+			<slider
+				style="width:300rpx;margin: 0px;"
+				@changing="blurChangeing"
+				@change="blurChange"
+				:activeColor="$colorList.theme"
+				:block-color="$colorList.white"
+				:value="blur"
+				:min="0"
+				:max="10"
+				:block-size="20"
+				:step="0.1"
 				show-value
 			/>
 		</view>
@@ -71,6 +87,9 @@ export default {
 	computed: {
 		opacity() {
 			return this.$store.state.schedule.courseBlockOpacity;
+		},
+		blur(){
+		return this.$store.state.schedule.backgroundBlur;	
 		},
 		fontColor() {
 			return this.$store.state.schedule.isFontColorWhite;
@@ -159,17 +178,32 @@ export default {
 			this.Bus.$emit('setBackground', newPath);
 			this.Bus.$refs['tip'].show('设置背景成功, 如无法显示请压缩图片质量');
 		},
-		sliderChangeing(e) {
+		opacityChangeing(e) {
 			this.$store.commit({
 				type: 'changeStateofSchedule',
 				stateName: 'courseBlockOpacity',
 				value: e.detail.value
 			});
 		},
-		sliderChange(e) {
+		opacityChange(e) {
 			this.$store.commit({
 				type: 'changeStateofSchedule',
 				stateName: 'courseBlockOpacity',
+				value: e.detail.value,
+				toStorage: true
+			});
+		},
+		blurChangeing(e) {
+			this.$store.commit({
+				type: 'changeStateofSchedule',
+				stateName: 'backgroundBlur',
+				value: e.detail.value
+			});
+		},
+		blurChange(e) {
+			this.$store.commit({
+				type: 'changeStateofSchedule',
+				stateName: 'backgroundBlur',
 				value: e.detail.value,
 				toStorage: true
 			});
