@@ -88,11 +88,11 @@ export default {
 	// 	this.$emit('changeGradeConfig');
 	// },
 	onShow() {
-		const exceptGradeLength = this.$store.state.grade.exceptGrade.length;
-		if (exceptGradeLength !== this.exceptGradeLength) {
+		const exceptGradeString = this.$store.state.grade.exceptGrade;
+		if (exceptGradeString !== this.exceptGradeString) {
 			this.$emit('changeGradeConfig');
 		}
-		this.exceptGradeLength = exceptGradeLength;
+		this.exceptGradeString = exceptGradeString;
 	},
 	onPullDownRefresh() {
 		this.refreshGradeByEdu();

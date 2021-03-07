@@ -9,21 +9,6 @@
 			</view>
 		</view>
 		<view class="hg flex-row j-sb px-4">
-			<view>课程块不透明度</view>
-			<slider
-				style="width:300rpx;margin: 0px;"
-				@changing="opacityChangeing"
-				@change="opacityChange"
-				:activeColor="$colorList.theme"
-				:block-color="$colorList.white"
-				:value="opacity"
-				:min="10"
-				:block-size="20"
-				:step="5"
-				show-value
-			/>
-		</view>
-		<view class="hg flex-row j-sb px-4">
 			<view>背景高斯模糊度</view>
 			<slider
 				style="width:300rpx;margin: 0px;"
@@ -36,6 +21,21 @@
 				:max="10"
 				:block-size="20"
 				:step="0.1"
+				show-value
+			/>
+		</view>
+        <view class="hg flex-row j-sb px-4">
+			<view>课程块不透明度</view>
+			<slider
+				style="width:300rpx;margin: 0px;"
+				@changing="opacityChangeing"
+				@change="opacityChange"
+				:activeColor="$colorList.theme"
+				:block-color="$colorList.white"
+				:value="opacity"
+				:min="10"
+				:block-size="20"
+				:step="5"
 				show-value
 			/>
 		</view>
