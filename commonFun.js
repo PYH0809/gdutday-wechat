@@ -198,9 +198,11 @@ export function removeOpacity(str) {
 //深度拷贝
 export function deepCopy(obj) {
 	if (typeof obj == "object") {
-		let result = obj.constructor == Array ? [] : {};
-		Object.keys(obj).forEach(item => (result[item] = deepCopy(obj[item])));
-		return result;
+		const result = obj.constructor === Array ? [] : {}
+		for (let key in obj) {
+			if (obj.hasOwnProperty(key)) result[key] = deepCopy(obj[key])
+		}
+		return result
 	} else return obj;
 }
 //rgba转换为十六进制颜色

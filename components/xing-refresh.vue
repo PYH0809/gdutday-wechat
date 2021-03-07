@@ -81,13 +81,13 @@ export default {
 	},
 	data() {
 		return {
+			status: 0,
 			isTouch: false, //触摸的标识
 			y: 0, //控制y
 			diff: 0, //定值topHeight-interruptPotion
 			scrollmark: true,
 			timeId: null,
 			top: 0,
-			status: 0,
 			count: 0.01,
 			scrollCount: 0.01,
 			fingers: 0, //记录手指数
