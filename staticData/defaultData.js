@@ -163,10 +163,20 @@ export const defaultCourseBlock = [
 ];
 
 export const defaultExamNewData = [
+    {
+    	examClassroom: "考试安排数据为空",
+    	examCountDown: 23,
+    	examDate: "2022-01-01",
+    	examDay: "1",
+    	examPosition: "1",
+    	examSubject: "左侧为时间倒计时",
+    	examTime: "00:00--00:00",
+    	examWeek: "1",
+    },
 	{
 		examClassroom: "1号大教室",
 		examCountDown: 21,
-		examDate: "2021-01-01",
+		examDate: "2021-04-02",
 		examDay: "1",
 		examPosition: "1",
 		examSubject: "可下拉刷新",

@@ -62,9 +62,8 @@ export default {
 	},
 	// #ifdef MP
 	created() {
-		// this.schoolOpening().catch(e => console.log(e));
 		this.$on('changeShareParams', params => (this.shareParams = params));
-		this.schoolOpening().catch(e => console.log(e));
+		this.updateschoolOpening().catch(e => console.log(e));
 	},
 	onLoad(query) {
 		uni.showShareMenu();
@@ -152,19 +151,24 @@ export default {
 						beforeVersion !== version &&
 						(this.$account.ID !== '' || this.$education.ID !== '')
 					) {
-						let that = this;
-						uni.showModal({
-							title: '更新说明',
-							content: '您已更新至最新版本，是否要查看更新说明 ? ',
-							confirmColor: this.$commonFun.hexify(this.$colorList.theme),
-							confirmText: '查看',
-							success(res) {
-								if (res.confirm) {
-									that.$Router.push({ name: 'mark' });
-								}
-							}
-							// success: e => this.$Router.push({ name: 'mark' })
-						});
+                        const {
+                        	data: { detail }
+                        } = await this.$http.get(APIs.versionDetail);
+                        if (detail != '') {
+                            let that = this;
+                            console.log(detail);
+                            uni.showModal({
+                            	title: '更新说明',
+                            	content: detail,
+                            	confirmColor: this.$commonFun.hexify(this.$colorList.theme),
+                            	confirmText: '查看详情',
+                            	success(res) {
+                            		if (res.confirm) {
+                            			that.$Router.push({ name: 'mark' });
+                            		}
+                            	}
+                            });
+                        }
 						uni.setStorageSync('version', version);
 					}
 				}
@@ -172,7 +176,7 @@ export default {
 			// #endif
 		},
 		// 检测开学日期
-		async schoolOpening() {
+		async updateschoolOpening() {
 			const {
 				data: { schoolOpening }
 			} = await this.$http.get(APIs.getSchoolOpening);

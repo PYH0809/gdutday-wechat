@@ -103,8 +103,8 @@ export default {
 	methods: {
 		downloadFile(url) {
 			//是否可直接预览 是则弹出选择框
-			const isHttps = url.includes('news.gdut.edu.cn') && url.includes('https');
-			this.url = isHttps ? url : url.toString().replace('http', 'https');
+			// const isHttps = url.includes('news.gdut.edu.cn') && url.includes('https');
+			// this.url = isHttps ? url : url.toString().replace('http', 'https');
 			const isDocType = ['ppt','doc','xsl','pdf'].some(item => url.includes(item));
 			if( this.url.includes('news.gdut.edu.cn')&&isDocType){
 				this.isProgress = false;

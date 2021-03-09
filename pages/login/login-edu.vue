@@ -95,9 +95,23 @@ export default {
 		this.getImage();
 		this.ID = this.$education.ID;
 		this.password = this.$education.password;
+        this.educationSystemErrorTip();
 	},
 	created() {},
 	methods: {
+        educationSystemErrorTip(){
+            let now = new Date();
+            let hour = now.getHours();
+            if (hour >= 9 && hour <= 19) {
+                return;
+            }
+            uni.showModal({
+            	showCancel: false,
+            	title: '提示',
+            	content: '9-19点以外的时间,教务系统可能限制非校园网的访问,非校园网Wi-Fi验证码无法刷出即为限制访问。可在每日9-19点期间刷新或者登录。',
+            	success: () => {}
+            });
+        },
 		tap() {
 			if (
 				this.ID.length != 10 ||
@@ -192,6 +206,7 @@ export default {
 							toStorage: true,
 							toStringify: true
 						});
+                        this.$commonFun.countTimes();
 						let _this = this;
 						uni.showModal({
 							showCancel: false,

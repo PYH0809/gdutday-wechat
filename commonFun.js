@@ -60,7 +60,7 @@ export function getDate(intervalDay) {
 }
 //获取现在的周数(相对于开学日期)
 export function getWeek() {
-	let termStart = getStorageSync('schoolOpening', "2020.9.7");
+	let termStart = getStorageSync('schoolOpening', "2021.3.1");
 	const start = termStart.split("."),
 		diff =
 		new Date().getTime() -

@@ -31,7 +31,7 @@ export default {
     notice: getStorageSync('notice', '0', true),
     examNewData: getStorageSync('examNewData', defaultExamNewData, true),
     addClassData: getStorageSync('addClassData', [], true),
-    // countTimes: getStorageSync("countTimes", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],true), //校区
+    countTimes: getStorageSync("countTimes", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],true), //校区
     campus: getStorageSync('campus', '大学城校区'), //校区
     courseBlockOpacity: getStorageSync('courseBlockOpacity', 80),
 	backgroundBlur: getStorageSync('backgroundBlur', 0),

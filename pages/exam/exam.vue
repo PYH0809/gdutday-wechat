@@ -94,7 +94,7 @@
 	</view>
 </template>
 <script>
-import { APIs } from '@/staticData/staticData.js';
+import { APIs,defaultExamNewData } from '@/staticData/staticData.js';
 import { getDayDiff, goToLoginUpdate } from '@/commonFun.js';
 import yzmcom from '@/components/cerbur-yzm.vue';
 export default {
@@ -164,6 +164,9 @@ export default {
 		getExam() {
 			//获取列表
 			let examList = JSON.parse(uni.getStorageSync('examNewData'));
+            if (examList.length == 0) {
+                examList = defaultExamNewData
+            }
 			let examNoEnd = [];
 			let examEnd = [];
 			examList.forEach(it => {
@@ -177,6 +180,7 @@ export default {
 			examNoEnd.sort((a, b) => a.examCountDown - b.examCountDown);
 			examEnd.sort((a, b) => b.examCountDown - a.examCountDown);
 			this.infoList = examNoEnd.concat(examEnd);
+            
 		},
 		refreshGradeByEdu() {
 			if (this.loading) return;
@@ -185,56 +189,6 @@ export default {
 		fail() {
 			uni.stopPullDownRefresh();
 		}
-		// async refreshGrade() {
-		// 	if (this.loading) return;
-		// 	if (this.$education.ID.length === 0)
-		// 		return uni.stopPullDownRefresh() && this.tip('无账号,请先登录');
-		// 	uni.showLoading({
-		// 		title: '查询考试中..'
-		// 	});
-		// 	this.loading = true;
-		// 	try {
-		// 		const {
-		// 			data: { error, data }
-		// 		} = await this.$commonFun
-		// 			.rePromise({
-		// 				PromiseFunction: this.$http.post.bind(this.$http),
-		// 				parms: [
-		// 					APIs.exam,
-		// 					{
-		// 						schoolId: this.$account.ID,
-		// 						password: this.$account.password
-		// 					}
-		// 				]
-		// 			})
-		// 			.finally(() => {
-		// 				uni.stopPullDownRefresh();
-		// 				this.loading = false;
-		// 			});
-		// 		if (+error == 1) {
-		// 			this.$store.commit('changeStateofGrade', {
-		// 				stateName: 'examNewData',
-		// 				value: data,
-		// 				toStorage: true,
-		// 				toStringify: true
-		// 			});
-		// 			this.tip(
-		// 				...(data.length
-		// 					? ['考试安排查询成功', 'success']
-		// 					: ['查询成功,但无数据'])
-		// 			);
-		// 			console.log(111)
-		// 			this.getExam();
-		// 			console.log(222)
-		// 		} else {
-		// 			this.tip('考试查询失败,请重试');
-		// 		}
-		// 	} catch (e) {
-		// 		console.log(e);
-		// 		uni.stopPullDownRefresh();
-		// 		this.tip('考试查询失败,请重试');
-		// 	}
-		// }
 	}
 };
 </script>

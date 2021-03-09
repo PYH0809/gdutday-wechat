@@ -113,6 +113,20 @@ export default {
         this.isLoadMore = true;
 		this.getNewsList();
 	},
+    onShareAppMessage(res) {
+    	// 来自页面内转发按钮
+    	return {
+    		title: 'gdutday | 校内通知分享给你',
+    		path: `/pages/news/news`
+    	};
+    },
+    onShareTimeline(){
+    	return {
+    		title: 'gdutday | 校内通知分享给你',
+    		path: `/pages/news/news`,
+            query:'',
+    	}
+    },
 }
 </script>
 

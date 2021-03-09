@@ -40,7 +40,7 @@
 			</comfirm>
 		</modal>
 		<tip ref="tip"></tip>
-		<yzmcom ref="reyzm" />
+		<yzmcom @success="goToHome" ref="reyzm" />
 	</view>
 </template>
 <script>
@@ -105,6 +105,9 @@ export default {
 		this.unifiedPassword = this.$unifiedPassword;
 	},
 	methods: {
+        goToHome() {
+            this.$Router.replaceAll({ name: 'schedule' });
+        },
 		refreshGradeByEdu() {
 			if (!this.hasEducation) {
 				let that = this;

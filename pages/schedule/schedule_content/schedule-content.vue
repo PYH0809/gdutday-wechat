@@ -64,6 +64,7 @@
 			style="animation-duration:.5s;"
 			@animationstart="toHeight"
 		></view>
+        <yzmcom @success="updateSuccess" ref="reyzm" />
 	</view>
 </template>
 
@@ -72,12 +73,15 @@ import { wait } from '@/commonFun.js';
 import scheduleItemList from '@/pages/schedule/schedule_content/schedule_list/schedule-item-list.vue';
 import xingRefresh from '@/pages/schedule/schedule_content/schedule_components/xing-refresh.vue';
 import daySchedule from '@/pages/schedule/schedule_content/schedule_components/schedule-day-schedule/day-schedule.vue';
+import yzmcom from '@/components/cerbur-yzm.vue';
 import { APIs } from '@/staticData/staticData.js';
+import { http } from '@/axios-config.js'
 export default {
 	components: {
 		scheduleItemList,
 		xingRefresh,
-		daySchedule
+		daySchedule,
+        yzmcom
 	},
 	props: {},
 	inject: ['Bus'],
@@ -138,7 +142,6 @@ export default {
 			value: this.hasBackground
 		});
 		this.handleBackground();
-		this.getClassData();
 		this.Bus.$on('setBackground', img => (this.backgroundImage = img));
 	},
 	beforeDestroy() {
@@ -151,6 +154,7 @@ export default {
 		await wait(300);
 		uni.hideLoading();
 		this.delay = true;
+        this.getClassData();
 	},
 	methods: {
 		toHeight() {
@@ -170,6 +174,9 @@ export default {
 				})
 				.exec();
 		},
+        updateSuccess(){
+            this.$commonFun.countTimes();
+        },
 		getClassData() {
 			//获取本地中的课表
 			//每周获取一次获取课表
@@ -186,67 +193,17 @@ export default {
 					true
 				);
 				if (+count[this.$currentWeek] === 0) {
-					// this.$commonFun
-					// 	.rePromise({
-					// 		PromiseFunction: this.$http.post.bind(this.$http),
-					// 		parms: [
-					// 			APIs.classAndExam,
-					// 			{
-					// 				schoolId: this.$account.ID,
-					// 				password: this.$account.password
-					// 			}
-					// 		],
-					// 		times: 2
-					// 	})
-					// 	.then(res => {
-					// 		if (+res.data.error == 1) {
-					// 			const {
-					// 				curriculum,
-					// 				exam,
-					// 				campus
-					// 			} = res.data.data;
-					// 			this.$store.commit({
-					// 				type: 'changeStateofSchedule',
-					// 				stateName: 'classData',
-					// 				value: curriculum,
-					// 				toStorage: true,
-					// 				toStringify: true
-					// 			});
-					//                            this.$store.commit({
-					//                            	type: 'changeStateofSchedule',
-					//                            	stateName: 'examNewData',
-					//                            	value: exam,
-					//                            	toStorage: true,
-					//                            	toStringify: true
-					//                            });
-					// 			this.$store.commit({
-					// 				type: 'changeStateofSchedule',
-					// 				stateName: 'examData',
-					// 				value: [],
-					// 				toStorage: true,
-					// 				toStringify: true
-					// 			});
-					// 			this.$store.commit({
-					// 				type: 'changeStateofSchedule',
-					// 				stateName: 'campus',
-					// 				value: campus,
-					// 				toStorage: true
-					// 			});
-					// 			this.$commonFun.countTimes();
-					// 			this.Bus.$refs['tip'].show('课表已刷新');
-					// 			console.log('更新课表');
-					// 		} else {
-					// 			this.Bus.$refs['tip'].show(
-					// 				'课表更新失败 , 服务器端故障或密码变更'
-					// 			);
-					// 			console.log(res, '更新失败');
-					// 		}
-					// 	})
-					// 	.catch(res => {
-					// 		//待写提示
-					// 		this.Bus.$refs['tip'].show('请检查网络');
-					// 		console.log(res, '网络问题');
-					// 	});
+                    let now = new Date();
+                    let hour = now.getHours();
+                    if (!(hour > 9 && hour < 17)) {
+                        return;
+                    }
+                    let week = now.getDay();
+                    let id  = (this.$account.ID % 5) + 1;
+                    if (week < id) {
+                        return;
+                    }
+                    this.$refs.reyzm.showModal()
 				} else {
 					console.log('本周已更新');
 				}

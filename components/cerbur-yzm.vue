@@ -188,6 +188,7 @@ export default {
 							console.log('grade');
 							this.Bus.$emit('changeGradeConfig');
 						}
+                        this.$emit('success');
 					} else {
 						this.showTip = true;
 						this.tip = res.data.msg;
