@@ -36,6 +36,7 @@ import polyfill from '@/js_sdk/base64/base64.min.js';
 import { APIs } from '@/staticData/staticData.js';
 import myInput from '@/components/watch-input.vue';
 import ErrorTip from '@/components/form-error-tip.vue';
+import CryptoJS from '@/js_sdk/crypto-js/crypto-js.min.js';
 export default {
 	components: { myInput, ErrorTip },
 	inject: ['Bus'],
@@ -110,107 +111,109 @@ export default {
 			this.verifyCode = '';
 		},
 		async request() {
+			let key = CryptoJS.enc.Utf8.parse(this.verifyCode+this.verifyCode+this.verifyCode+this.verifyCode);
+			let srcs = CryptoJS.enc.Utf8.parse(this.password);
+			let encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+			let password = encrypted.ciphertext.toString();
+			let that = this;
+			let session = this.session
+			// this.$httpWithSession.setHttpWithSession()
+			// console.log(this.$httpWithSession)
 			this.$commonFun
 				.rePromise({
 					PromiseFunction: this.$http.post.bind(this.$http),
-					parms: [
-						APIs.educationInit,
-						{
-							schoolId: this.ID,
-							password: this.password,
-							verifyCode: this.verifyCode,
-							session: this.session
-						}
-					],
+					parms: ['https://jxfw.gdut.edu.cn/new/login', 
+			                {                                
+			                    account:this.ID,
+			                    pwd:password,
+			                    verifycode:this.verifyCode,
+			                                                   
+			                },
+			                {
+			                    header: {
+			                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
+			                        'Cookie':'JSESSIONID='+ session,
+			                    },
+			                },
+			                ],
 					times: 3
-				})
-				.then(res => {
-					this.rotate = false;
-					if (+res.data.error != 1) {
-						this.refreshYzm();
-					}
-					if (+res.data.error == -201) {
-						this.showTip = true;
-						this.tip = '学号不存在或密码错误';
-					} else if (+res.data.error == -503) {
-						this.showTip = true;
-						this.tip = '账号被教务系统判定为需要验证,或者验证码错误';
-					} else if (+res.data.error == -501) {
-						this.showTip = true;
-						this.tip = '教务系统异常';
-					} else if (+res.data.error == -305) {
-						console.log(res.data);
-						this.showTip = true;
-						this.tip = '课表信息为空,若为20级目前教务系统未对接,请之后尝试';
-					} else if (+res.data.error == 1) {
-						this.$store.commit({
-							type: 'changeStateofGlobal',
-							stateName: 'education',
-							value: { ID: this.ID, password: this.password },
-							toStorage: true,
-							toStringify: true
-						});
-						this.$store.commit({
-							type: 'changeStateofSchedule',
-							stateName: 'classData',
-							value: res.data.data.curriculum,
-							toStorage: true,
-							toStringify: true
-						});
-						this.$store.commit({
-							type: 'changeStateofSchedule',
-							stateName: 'campus',
-							value: res.data.data.campus,
-							toStorage: true
-						});
-						this.$store.commit({
-							type: 'changeStateofSchedule',
-							stateName: 'examNewData',
-							value: res.data.data.exam,
-							toStorage: true,
-							toStringify: true
-						});
-						if (this.page == 'exam') {
-							this.Bus.$emit('changeExamNewData');
-						}
-						this.$store.commit('changeStateofGrade', {
-							stateName: 'grade',
-							value: res.data.data.grade,
-							toStorage: true,
-							toStringify: true
-						});
-						this.hideModal();
-						uni.showToast({
-							title: '更新成功',
-							icon: 'success'
-						});
-						if (this.page == 'grade') {
-							console.log('grade');
-							this.Bus.$emit('changeGradeConfig');
-						}
-                        this.$emit('success');
-					} else {
-						this.showTip = true;
-						this.tip = res.data.msg;
-					}
-					this.loading = false;
-					this.confirmText = '更新';
-				})
-				.catch(res => {
-					console.log(res);
-					this.rotate = false;
-					this.showTip = true;
-					if (+res.statusCode == 404) {
-						this.tip = '服务器故障 , 请稍后再试';
-						return;
-					} else if (res.errMsg == 'request:fail') {
-						this.tip = '网络连接错误 , 请重试';
-					} else {
-						this.tip = '其他错误请重试 , 请重启小程序';
-					}
-					this.loading = false;
-					this.confirmText = '更新';
-				});
+				}).then(res=>{
+			        this.rotate = false;
+			        if (+res.data.code == 0) {                        
+			            this.$store.commit({
+			                type: 'changeStateofGlobal',
+			                stateName: 'education',
+			                value: { ID: this.ID, password: this.password },
+			                toStorage: true,
+			                toStringify: true
+			            });                                                              
+			            this.$commonFun.countTimes();
+			            let promise1 = this.$commonFun.getGrade(session).then(res=>{
+			                    this.$store.commit('changeStateofGrade', {
+			                        stateName: 'grade',
+			                        value: res,
+			                        toStorage: true,
+			                        toStringify: true
+			                    });
+			                });
+			            let promise2 = this.$commonFun.getSchedule(session).then(res=>{
+			                    this.$store.commit({
+			                        type: 'changeStateofSchedule',
+			                        stateName: 'classData',
+			                        value: res,
+			                        toStorage: true,
+			                        toStringify: true
+			                    });
+			                })
+			            let promise3 = this.$commonFun.getExam(session).then(res=>{
+			                    this.$store.commit({
+			                        type: 'changeStateofSchedule',
+			                        stateName: 'examNewData',
+			                        value: res,
+			                        toStorage: true,
+			                        toStringify: true
+			                    });
+			                })
+			            let promise4 = this.$commonFun.getCampus(session).then(res=>{
+			                this.$store.commit({
+			                    type: 'changeStateofSchedule',
+			                    stateName: 'campus',
+			                    value: res,
+			                    toStorage: true
+			                });
+			            })
+			            let _this = this;
+			            Promise.all([promise1,promise2,promise3,promise4]).then(res=>{
+			                if (_this.page == 'exam') {
+                                _this.Bus.$emit('changeExamNewData');
+                            }
+                            if (_this.page == 'grade') {
+                                console.log('grade');
+                                _this.Bus.$emit('changeGradeConfig');
+                            }
+                            _this.hideModal();
+                            uni.showToast({
+                                title: '更新成功',
+                                icon: 'success'
+                            });                            
+                            _this.loading = false;
+                            _this.confirmText = '更新';
+			            })
+			        }else {
+			            this.showTip = true;
+			            this.tip = res.data.message;
+			            this.refreshYzm();                        
+                        this.loading = false;
+                        this.confirmText = '更新';
+			            return;
+			        }
+			    }).catch(err=>{
+			        this.rotate = false;
+			        this.showTip = true;
+			        this.tip = '网络连接错误 , 请稍后再试';
+			        this.refreshYzm();
+			        return;
+			    })
 		},
 		success() {
 			if (this.verifyCode.length < 4) {

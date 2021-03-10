@@ -156,7 +156,6 @@ export default {
                         } = await this.$http.get(APIs.versionDetail);
                         if (detail != '') {
                             let that = this;
-                            console.log(detail);
                             uni.showModal({
                             	title: '更新说明',
                             	content: detail,

@@ -510,7 +510,198 @@ export function getLastExam() {
 	})
 	return last;
 }
+let semester = '202002'
+export async function getSchedule(token) {
+    return await rePromise({
+        PromiseFunction: http.post.bind(http),
+        parms: ['https://jxfw.gdut.edu.cn/xsgrkbcx!getDataList.action', 
+                {                                
+                    'xnxqdm':semester,
+                    'zc':'',
+                    'page':'1',
+                    'rows':'300',
+                    'sort':'kxh',
+                    'order':'asc',                           
+                },
+                {
+                    header: {
+                        'Cookie':'JSESSIONID='+ token,
+                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                },
+                ],
+        times: 3
+    }).then(res=>{
+        if (res.data.rows != undefined) {
+            let scheduleList = res.data.rows;
+            let newList = []
+            scheduleList.forEach(s=>{
+                let newS = {
+                    'courseName':s.kcmc,
+                    'courseContent':s.sknrjj,
+                    'courseTime':s.jcdm,
+                    'courseWeek':s.zc,
+                    'courseDay':s.xq,
+                    'courseRoom':s.jxcdmc,
+                    'courseTeacher':s.teaxms,
+                }
+                newList.push(newS)
+            })
+            
+            let dtoArrayList = [];
+            newList.forEach(s=>{
+                let courseWeekAndContent = {
+                    'courseWeek': s.courseWeek,
+                    'courseContent': s.courseContent
+                }
+                let flag1 = true;
+                for(let i = 0;i<dtoArrayList.length;i++) {
+                    if (dtoArrayList[i].courseTime == s.courseTime &&
+                        dtoArrayList[i].courseRoom == s.courseRoom &&
+                        dtoArrayList[i].courseTeacher == s.courseTeacher &&
+                        dtoArrayList[i].courseDay == s.courseDay) {
+                        flag1 = false;
+                        dtoArrayList[i].courseWeekAndContent.push(courseWeekAndContent);
+                        break;
+                    }
+                }
+                if (flag1) {
+                    let scheduleDTO = {
+                        'courseName':s.courseName,
+                        'courseTeacher':s.courseTeacher,
+                        'courseDay':s.courseDay,
+                        'courseTime':s.courseTime,
+                        'courseRoom':s.courseRoom,
+                        'courseWeekAndContent':[]
+                    }
+                    scheduleDTO.courseWeekAndContent.push(courseWeekAndContent)
+                    dtoArrayList.push(scheduleDTO);
+                }
+            })
+            return dtoArrayList
+        }
+    }).catch(err=>{
+        return [];
+    })
+}
+export async function getGrade(token) {
+    const {
+    	data: { rows }
+    } = await rePromise({
+        PromiseFunction: http.post.bind(http),
+        parms: ['https://jxfw.gdut.edu.cn/xskccjxx!getDataList.action', 
+                {
+                    'xnxqdm': '',
+                    'jhlxdm': '',
+                    'page': '1',
+                    'rows': '200',
+                    'order':'asc',
+                    'sort':'xnxqdm',
+                },
+                {
+                    header: {
+                        'Cookie':'JSESSIONID='+ token,
+                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                },
+                ],
+        times: 3
+    })
+    if (rows == undefined) {
+        return [];
+    }
+    let examList = [];
+    rows.forEach(r=>{
+        if (!(r.cjjd == null || r.ksxzmc.indexOf('补考') >= 0 )){
+            let exam = {
+                examTime:r.xnxqmc,
+                examPole:r.cjjd,
+                examScore:r.zcj,
+                examName:r.kcmc,
+                readMethod:r.xdfsmc,
+                credit:r.xf,
+                classType:r.kcdlmc,
+                examType:r.ksxzmc,
+            }
+            examList.push(exam)
+        }
+    })
+    return examList
+}
+export async function getExam(token) {
+    const {
+    	data: { rows }
+    } = await rePromise({
+        PromiseFunction: http.post.bind(http),
+        parms: ['https://jxfw.gdut.edu.cn/xsksap!getDataList.action', 
+                {
+                    'xnxqdm': semester,
+                    'ksaplxdm': '',
+                    'page': '1',
+                    'rows': '200',
+                    'order':'asc',
+                    'sort':'zc,xq,jcdm2',
+                },
+                {
+                    header: {
+                        'Cookie':'JSESSIONID='+ token,
+                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                },
+                ],
+        times: 3
+    })
+    if (rows == undefined) {
+        return [];
+    }
+    if (rows.length == 0) {
+        return [];
+    }
+    let examList = [];
+    rows.forEach(r=>{
+        let exam = {
+            examDate:r.ksrq,
+            examWeek:r.zc,
+            examDay:r.xq,
+            examTime:r.kssj,
+            examPosition:r.zwh,
+            examSubject:r.kcmc,
+            examClassroom:r.kscdmc,
+        }
+        examList.push(exam)
+    })
+    return examList
+}
 
+export async function getCampus(token) {
+    const {
+    	data
+    } = await rePromise({
+        PromiseFunction: http.get.bind(http),
+        parms: ['https://jxfw.gdut.edu.cn/xjkpxx!xjkpxx.action',
+                {
+                    header: {
+                        'Cookie':'JSESSIONID='+ token,
+                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                },
+                ],
+        times: 3
+    })
+    if (data != '') {
+        let ret =  data.indexOf('校区</label></td>');
+        let retf = ret;
+        for (; retf >= 0 ; retf--) {
+            if (data[retf] == '>') {
+                break;
+            }
+        }
+        if (ret > retf && retf > 0 ) {
+            return data.substring(retf + 1,ret+2)
+        }
+    }
+    return '大学城校区'
+}
 const commonFun = {
 	getStorage,
 	getStorageSync,
@@ -537,6 +728,10 @@ const commonFun = {
 	wait,
 	getDayDiff,
 	getLastExam,
+    getSchedule,
+    getGrade,
+    getExam,
+    getCampus
 };
 Vue.prototype.$commonFun = commonFun;
 export default commonFun;
